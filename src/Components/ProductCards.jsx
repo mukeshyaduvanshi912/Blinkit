@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function ProductCards({ addToCart }) {
   const cards = [
@@ -27,7 +28,7 @@ export default function ProductCards({ addToCart }) {
       amount: 90,
       quantity: "1 kg",
       image:
-        "https://images.unsplash.com/photo-1611080626919-7cf5a9dbab12?auto=format&fit=crop&w=700&q=80",
+        "https://images.unsplash.com/photo-1557800636-894a64c1696f?auto=format&fit=crop&w=700&q=80",
     },
     {
       id: 4,
@@ -62,18 +63,27 @@ export default function ProductCards({ addToCart }) {
               boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
             }}
           >
-            <img
-              src={card.image}
-              alt={card.name}
-              style={{
-                width: "100%",
-                height: "200px",
-                objectFit: "cover",
-              }}
-            />
+            {/* 👇 Click image OR name to open product detail */}
+            <Link to={`/product/${card.id}`}>
+              <img
+                src={card.image}
+                alt={card.name}
+                style={{
+                  width: "100%",
+                  height: "200px",
+                  objectFit: "cover",
+                }}
+              />
+            </Link>
 
             <div style={{ padding: "15px" }}>
-              <h3>{card.name}</h3>
+              {/* clickable title */}
+              <Link
+                to={`/product/${card.id}`}
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                <h3>{card.name}</h3>
+              </Link>
 
               <p style={{ color: "#666", margin: "10px 0" }}>
                 {card.description}

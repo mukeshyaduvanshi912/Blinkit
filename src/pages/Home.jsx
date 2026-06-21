@@ -4,7 +4,7 @@ import ProductCards from "../Components/ProductCards";
 
 import slide1 from "../assets/slide1.png";
 import slide2 from "../assets/slide2.png";
-import slide3 from "../assets/slide3.png";
+import slide3 from "../assets/slide30.png";
 
 import milk from "../assets/milk.png";
 import bread from "../assets/bread.png";
@@ -14,7 +14,7 @@ import mango from "../assets/mango.png";
 import chips from "../assets/chips.png";
 import juice from "../assets/juice.png";
 import biscuits from "../assets/biscuits.png";
-import oranges from "../assets/oranges.png";
+
 
 
 function Home({ addToCart }) {
