@@ -1,10 +1,13 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import products from '../data/products';
+import useCart from '../hooks/useCart';
 
 export default function ProductDetails() {
   const { id } = useParams();
+  const { addToCart, removeFromCart, getProductQuantity } = useCart();
   const product = products.find((item) => item.id === Number(id));
+  const cartQuantity = product ? getProductQuantity(product.id) : 0;
 
   if (!product) {
     return (
@@ -44,10 +47,40 @@ export default function ProductDetails() {
             <p className="mt-6 text-3xl font-bold text-gray-900">Rs. {product.amount}</p>
             <p className="mt-5 text-base leading-7 text-gray-600">{product.details}</p>
 
+            {cartQuantity > 0 && (
+              <p className="mt-5 rounded-md bg-gray-100 px-4 py-3 text-sm font-semibold text-gray-800">
+                Cart Quantity: {cartQuantity}
+              </p>
+            )}
+
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <button className="rounded-md bg-gray-900 px-6 py-3 font-semibold text-white transition hover:bg-gray-700">
-                Add to Cart
-              </button>
+              {cartQuantity > 0 ? (
+                <div className="flex w-full items-center justify-between overflow-hidden rounded-md border border-gray-300 sm:w-auto">
+                  <button
+                    className="px-5 py-3 text-xl font-bold text-gray-900 transition hover:bg-gray-100"
+                    type="button"
+                    onClick={() => removeFromCart(product.id)}
+                  >
+                    -
+                  </button>
+                  <span className="min-w-14 px-4 text-center font-bold text-gray-900">{cartQuantity}</span>
+                  <button
+                    className="px-5 py-3 text-xl font-bold text-gray-900 transition hover:bg-gray-100"
+                    type="button"
+                    onClick={() => addToCart(product)}
+                  >
+                    +
+                  </button>
+                </div>
+              ) : (
+                <button
+                  className="rounded-md bg-gray-900 px-6 py-3 font-semibold text-white transition hover:bg-gray-700"
+                  type="button"
+                  onClick={() => addToCart(product)}
+                >
+                  Add to Cart
+                </button>
+              )}
               <button className="rounded-md border border-gray-300 px-6 py-3 font-semibold text-gray-900 transition hover:bg-gray-100">
                 Buy Now
               </button>

@@ -2,6 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 export default function ProductCards({ addToCart }) {
+  const [count, setCount] = React.useState(0);
+  const handle=()=>{
+    setCount(count+1);
+  }
+  localStorage.setItem("cartcount",count+1); 
   const cards = [
     {
       id: 1,
@@ -96,7 +101,10 @@ export default function ProductCards({ addToCart }) {
               <h3 style={{ color: "#00b761" }}>₹{card.amount}</h3>
 
               <button
-                onClick={() => addToCart(card)}
+                onClick={() => {
+                  addToCart(card);
+                  setCount(count + 1);
+                }}
                 style={{
                   background: "#00b761",
                   color: "#fff",
