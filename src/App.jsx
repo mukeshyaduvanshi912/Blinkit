@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
@@ -8,10 +8,12 @@ import Login from "./pages/Login";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import ProductDetail from "./pages/ProductDetail";
+import Register from "./pages/Register";
+import Users from "./pages/Users";
 
 function App() {
   return (
-    <BrowserRouter>
+    <>
       <Header />
 
       <Routes>
@@ -20,10 +22,14 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
+
+        {/* New Routes */}
+        <Route path="/register" element={<Register />} />
+        <Route path="/users" element={<Users />} />
       </Routes>
 
       <Footer />
-    </BrowserRouter>
+    </>
   );
 }
 

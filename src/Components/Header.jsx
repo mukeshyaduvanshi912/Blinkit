@@ -13,11 +13,15 @@ function Header() {
     >
       <h2>Blinkit</h2>
 
-      <div style={{ display: "flex", gap: "20px" }}>
+      <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
         <Link to="/">Home</Link>
         <Link to="/about">About Us</Link>
         <Link to="/contact">Contact Us</Link>
         <Link to="/login">Login</Link>
+
+        {/* New Links */}
+        <Link to="/register">Register</Link>
+        <Link to="/users">Users</Link>
 
         <button
           style={{
@@ -26,6 +30,7 @@ function Header() {
             border: "none",
             padding: "8px 15px",
             borderRadius: "5px",
+            cursor: "pointer",
           }}
         >
           Cart 🛒
