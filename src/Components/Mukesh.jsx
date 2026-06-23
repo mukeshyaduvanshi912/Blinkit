@@ -1,5 +1,6 @@
-import React, {useState} from 'react'
-export default function Mukesh(){
+import { useState } from 'react'
+
+export default function Mukesh() {
   const [name, setname] = useState('h');
   const [count, setCount] = useState(0);
   const increment = () => {

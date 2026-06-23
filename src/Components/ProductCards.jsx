@@ -3,10 +3,6 @@ import { Link } from "react-router-dom";
 
 export default function ProductCards({ addToCart }) {
   const [count, setCount] = React.useState(0);
-  const handle=()=>{
-    setCount(count+1);
-  }
-  localStorage.setItem("cartcount",count+1); 
   const cards = [
     {
       id: 1,
