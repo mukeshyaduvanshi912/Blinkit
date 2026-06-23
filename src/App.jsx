@@ -10,6 +10,8 @@ import Contact from "./pages/Contact";
 import ProductDetail from "./pages/ProductDetail";
 import Register from "./pages/Register";
 import Users from "./pages/Users";
+import AddProduct from "./pages/AddProduct";
+import Cart from "./pages/Cart";
 
 function App() {
   return (
@@ -22,10 +24,10 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
-
-        {/* New Routes */}
         <Route path="/register" element={<Register />} />
         <Route path="/users" element={<Users />} />
+        <Route path="/add-product" element={<AddProduct />} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
 
       <Footer />

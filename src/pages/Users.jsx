@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api";
+
 function Users() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/users/all-users")
+    fetch(`${API_BASE_URL}/users/all-users`)
       .then((res) => res.json())
       .then((data) => {
         setUsers(data.users);
@@ -15,7 +17,7 @@ function Users() {
   }, []);
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div className="page-section">
       <h1>All Users</h1>
 
       {users.map((user) => (

@@ -1,6 +1,6 @@
 function About() {
   return (
-    <div style={{ padding: "40px" }}>
+    <div className="page-section">
       <h1>About Us</h1>
 
       <p>

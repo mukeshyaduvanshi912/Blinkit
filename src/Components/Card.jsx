@@ -5,14 +5,17 @@ function Card({ image, name, price, addToCart }) {
         border: "1px solid #ddd",
         padding: "15px",
         borderRadius: "10px",
-        width: "180px",
+        width: "100%",
+        maxWidth: "220px",
         textAlign: "center",
+        minWidth: "160px",
+        boxSizing: "border-box",
       }}
     >
       <img
         src={image}
         alt={name}
-        style={{ width: "100px", height: "100px", objectFit: "cover" }}
+        style={{ width: "100%", height: "150px", objectFit: "cover", borderRadius: "8px" }}
       />
 
       <h3>{name}</h3>

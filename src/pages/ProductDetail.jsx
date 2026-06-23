@@ -1,12 +1,14 @@
 import { Link, useParams } from 'react-router-dom';
+import { useState } from 'react';
 import products from '../Data/products.js';
 import useCart from '../hooks/useCart';
 
 export default function ProductDetail() {
   const { id } = useParams();
-  const { addToCart, removeFromCart, getProductQuantity } = useCart();
+  const { addToCart, getProductQuantity } = useCart();
   const product = products.find((item) => item.id === Number(id));
   const cartQuantity = product ? getProductQuantity(product.id) : 0;
+  const [localQty, setLocalQty] = useState(0);
 
   if (!product) {
     return (
@@ -46,43 +48,49 @@ export default function ProductDetail() {
             <p className="mt-6 text-3xl font-bold text-gray-900">Rs. {product.amount}</p>
             <p className="mt-5 text-base leading-7 text-gray-600">{product.details}</p>
 
-            {cartQuantity > 0 && (
-              <p className="mt-5 rounded-md bg-gray-100 px-4 py-3 text-sm font-semibold text-gray-800">
-                Cart Quantity: {cartQuantity}
-              </p>
-            )}
+            <div className="mt-5">
+              {cartQuantity > 0 && (
+                <p className="mt-2 rounded-md bg-gray-100 px-4 py-3 text-sm font-semibold text-gray-800">
+                  In cart: {cartQuantity}
+                </p>
+              )}
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              {cartQuantity > 0 ? (
-                <div className="flex w-full items-center justify-between overflow-hidden rounded-md border border-gray-300 sm:w-auto">
-                  <button
-                    className="px-5 py-3 text-xl font-bold text-gray-900 transition hover:bg-gray-100"
-                    type="button"
-                    onClick={() => removeFromCart(product.id)}
-                  >
-                    -
-                  </button>
-                  <span className="min-w-14 px-4 text-center font-bold text-gray-900">{cartQuantity}</span>
-                  <button
-                    className="px-5 py-3 text-xl font-bold text-gray-900 transition hover:bg-gray-100"
-                    type="button"
-                    onClick={() => addToCart(product)}
-                  >
-                    +
-                  </button>
-                </div>
-              ) : (
+              <div className="mt-6 flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setLocalQty((q) => Math.max(0, q - 1))}
+                  className="px-4 py-2 rounded-md border"
+                >
+                  -
+                </button>
+
+                <span className="min-w-12 text-center">{localQty}</span>
+
+                <button
+                  type="button"
+                  onClick={() => setLocalQty((q) => q + 1)}
+                  className="px-4 py-2 rounded-md border"
+                >
+                  +
+                </button>
+
                 <button
                   className="rounded-md bg-gray-900 px-6 py-3 font-semibold text-white transition hover:bg-gray-700"
                   type="button"
-                  onClick={() => addToCart(product)}
+                  onClick={() => {
+                    if (localQty > 0) {
+                      addToCart(product, localQty);
+                      setLocalQty(0);
+                    }
+                  }}
                 >
                   Add to Cart
                 </button>
-              )}
-              <button className="rounded-md border border-gray-300 px-6 py-3 font-semibold text-gray-900 transition hover:bg-gray-100">
-                Buy Now
-              </button>
+
+                <button className="rounded-md border border-gray-300 px-6 py-3 font-semibold text-gray-900 transition hover:bg-gray-100">
+                  Buy Now
+                </button>
+              </div>
             </div>
           </div>
         </div>

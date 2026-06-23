@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function ProductCards({ addToCart }) {
-  const [count, setCount] = React.useState(0);
+export default function ProductCards({ addToCart, searchText = '' }) {
+  const [counters, setCounters] = React.useState({});
   const cards = [
     {
       id: 1,
@@ -42,18 +42,39 @@ export default function ProductCards({ addToCart }) {
     },
   ];
 
+  const increment = (id) => {
+    setCounters((prev) => ({
+      ...prev,
+      [id]: (prev[id] || 1) + 1,
+    }));
+  };
+
+  const decrement = (id) => {
+    setCounters((prev) => ({
+      ...prev,
+      [id]: Math.max((prev[id] || 1) - 1, 1),
+    }));
+  };
+
   return (
-    <div style={{ padding: "30px" }}>
-      <h2 style={{ marginBottom: "20px" }}>Popular Products</h2>
+    <div className="page-section product-section">
+      <h2 style={{ marginBottom: "16px" }}>Popular Products</h2>
 
       <div
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-          gap: "20px",
+          gap: "16px",
         }}
       >
-        {cards.map((card) => (
+        {cards
+          .filter((card) =>
+            card.name.toLowerCase().includes(searchText.toLowerCase()) ||
+            card.description.toLowerCase().includes(searchText.toLowerCase()) ||
+            card.quantity.toLowerCase().includes(searchText.toLowerCase()) ||
+            card.amount.toString().includes(searchText)
+          )
+          .map((card) => (
           <div
             key={card.id}
             style={{
@@ -64,7 +85,6 @@ export default function ProductCards({ addToCart }) {
               boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
             }}
           >
-            {/* 👇 Click image OR name to open product detail */}
             <Link to={`/product/${card.id}`}>
               <img
                 src={card.image}
@@ -77,8 +97,7 @@ export default function ProductCards({ addToCart }) {
               />
             </Link>
 
-            <div style={{ padding: "15px" }}>
-              {/* clickable title */}
+            <div style={{ padding: "14px" }}>
               <Link
                 to={`/product/${card.id}`}
                 style={{ textDecoration: "none", color: "black" }}
@@ -86,9 +105,7 @@ export default function ProductCards({ addToCart }) {
                 <h3>{card.name}</h3>
               </Link>
 
-              <p style={{ color: "#666", margin: "10px 0" }}>
-                {card.description}
-              </p>
+              <p style={{ color: "#666", margin: "8px 0" }}>{card.description}</p>
 
               <p>
                 <strong>{card.quantity}</strong>
@@ -96,24 +113,56 @@ export default function ProductCards({ addToCart }) {
 
               <h3 style={{ color: "#00b761" }}>₹{card.amount}</h3>
 
-              <button
-                onClick={() => {
-                  addToCart(card);
-                  setCount(count + 1);
-                }}
-                style={{
-                  background: "#00b761",
-                  color: "#fff",
-                  border: "none",
-                  padding: "10px 15px",
-                  borderRadius: "5px",
-                  cursor: "pointer",
-                  marginTop: "10px",
-                  width: "100%",
-                }}
-              >
-                Add To Cart
-              </button>
+              <div style={{ display: "grid", gap: "10px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <button
+                    type="button"
+                    onClick={() => decrement(card.id)}
+                    style={{
+                      width: "36px",
+                      height: "36px",
+                      borderRadius: "5px",
+                      border: "1px solid #ddd",
+                      background: "#fff",
+                      cursor: "pointer",
+                    }}
+                  >
+                    -
+                  </button>
+                  <span style={{ minWidth: "32px", textAlign: "center", fontWeight: 600 }}>
+                    {counters[card.id] || 1}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => increment(card.id)}
+                    style={{
+                      width: "36px",
+                      height: "36px",
+                      borderRadius: "5px",
+                      border: "1px solid #ddd",
+                      background: "#fff",
+                      cursor: "pointer",
+                    }}
+                  >
+                    +
+                  </button>
+                </div>
+
+                <button
+                  onClick={() => addToCart(card, counters[card.id] || 1)}
+                  style={{
+                    background: "#00b761",
+                    color: "#fff",
+                    border: "none",
+                    padding: "10px 15px",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                    width: "100%",
+                  }}
+                >
+                  Add To Cart
+                </button>
+              </div>
             </div>
           </div>
         ))}

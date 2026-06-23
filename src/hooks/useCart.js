@@ -1,92 +1,120 @@
 import { useEffect, useState } from 'react';
 
-const CART_STORAGE_KEY = 'blinkit_cart';
-const CART_UPDATED_EVENT = 'blinkit_cart_updated';
+const CART_API = '/api/cart';
+const CUSTOMER_ID = 1;
 
-function readCart() {
-  const storedCart = localStorage.getItem(CART_STORAGE_KEY);
-
-  if (!storedCart) {
-    return {};
-  }
-
-  try {
-    return JSON.parse(storedCart);
-  } catch {
-    return {};
-  }
-}
-
-function saveCart(cart) {
-  localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
-  window.dispatchEvent(new Event(CART_UPDATED_EVENT));
+function normalizeItem(item) {
+  return {
+    id: item.id,
+    productId: item.productId ?? item.product_id,
+    name: item.name,
+    amount: item.price ?? item.amount,
+    image: item.image ?? item.imageUrl,
+    category: item.category,
+    quantity: Number(item.quantity),
+  };
 }
 
 export default function useCart() {
-  const [cart, setCart] = useState(() => readCart());
+  const [cart, setCart] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const handleCartUpdate = () => {
-      setCart(readCart());
-    };
-
-    window.addEventListener(CART_UPDATED_EVENT, handleCartUpdate);
-    window.addEventListener('storage', handleCartUpdate);
-
-    return () => {
-      window.removeEventListener(CART_UPDATED_EVENT, handleCartUpdate);
-      window.removeEventListener('storage', handleCartUpdate);
-    };
-  }, []);
-
-  const getProductQuantity = (productId) => cart[productId]?.quantity || 0;
-
-  const addToCart = (product) => {
-    const latestCart = readCart();
-    const currentQuantity = latestCart[product.id]?.quantity || 0;
-
-    const updatedCart = {
-      ...latestCart,
-      [product.id]: {
-        id: product.id,
-        name: product.name,
-        amount: product.amount,
-        image: product.image,
-        quantity: currentQuantity + 1,
-      },
-    };
-
-    setCart(updatedCart);
-    saveCart(updatedCart);
+  const loadCart = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`${CART_API}?customerId=${CUSTOMER_ID}`);
+      const data = await response.json();
+      if (response.ok && data.success) {
+        setCart(data.items.map(normalizeItem));
+      } else {
+        setCart([]);
+      }
+    } catch (error) {
+      console.error('Cart load failed', error);
+      setCart([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const removeFromCart = (productId) => {
-    const latestCart = readCart();
-    const currentQuantity = latestCart[productId]?.quantity || 0;
+  useEffect(() => {
+    async function initCart() {
+      await loadCart();
+    }
+    initCart();
+  }, []);
 
-    if (currentQuantity <= 1) {
-      delete latestCart[productId];
-      setCart({ ...latestCart });
-      saveCart(latestCart);
+  const addToCart = async (product, quantity = 1) => {
+    const productId = product.productId ?? product.id;
+    if (!productId) return;
+    const qty = Number(quantity) || 1;
+    if (qty <= 0) return;
+
+    try {
+      const res = await fetch(CART_API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customerId: CUSTOMER_ID,
+          productId,
+          quantity: qty,
+        }),
+      });
+
+      const data = await res.json().catch(() => null);
+      if (!res.ok) {
+        console.error('Add to cart failed', res.status, data);
+        return false;
+      }
+
+      await loadCart();
+      return true;
+    } catch (err) {
+      console.error('Add to cart network error', err);
+      return false;
+    }
+  };
+
+  const decreaseQuantity = async (item) => {
+    if (!item?.id) return;
+    const nextQuantity = item.quantity - 1;
+    if (nextQuantity <= 0) {
+      await removeItem(item.id);
       return;
     }
 
-    const updatedCart = {
-      ...latestCart,
-      [productId]: {
-        ...latestCart[productId],
-        quantity: currentQuantity - 1,
-      },
-    };
+    await fetch(`${CART_API}/${item.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ quantity: nextQuantity }),
+    });
 
-    setCart(updatedCart);
-    saveCart(updatedCart);
+    await loadCart();
+  };
+
+  const removeItem = async (itemId) => {
+    if (!itemId) return;
+    await fetch(`${CART_API}/${itemId}`, { method: 'DELETE' });
+    await loadCart();
+  };
+
+  const clearCart = async () => {
+    await fetch(`${CART_API}?customerId=${CUSTOMER_ID}`, { method: 'DELETE' });
+    await loadCart();
+  };
+
+  const getProductQuantity = (productId) => {
+    const item = cart.find((cartItem) => cartItem.productId === productId);
+    return item?.quantity || 0;
   };
 
   return {
     cart,
+    loading,
     addToCart,
-    removeFromCart,
+    decreaseQuantity,
+    removeItem,
+    clearCart,
     getProductQuantity,
   };
 }
