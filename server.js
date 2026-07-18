@@ -15,7 +15,9 @@ const adminRoutes = require("./routes/adminRoutes");
 const cartRoutes = require("./routes/cartRoutes");
 const checkoutRoutes = require("./routes/checkoutRoutes");
 
-app.use(cors());
+app.use(cors({
+  origin: "https://blinkit-nine-zeta.vercel.app"
+}));
 
 app.get("/", (req, res) => {
   res.send("Backend Running Successfully");
