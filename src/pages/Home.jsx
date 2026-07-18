@@ -21,7 +21,6 @@ function Home({ addToCart }) {
   const slides = [slide1, slide2, slide3];
 
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [searchText, setSearchText] = useState('');
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -44,70 +43,83 @@ function Home({ addToCart }) {
 
   return (
     <>
-      {/* Location + Search */}
-      <section className="page-section home-top" style={{ justifyContent: 'space-between' }}>
-        <div>
-          <p style={{ margin: 0, color: '#4caf50', fontWeight: 700 }}>Delivery location</p>
-          <h1 style={{ margin: '10px 0 0', fontSize: '1.75rem' }}>Lucknow, Uttar Pradesh</h1>
-        </div>
-
-        <div style={{ flex: '1 1 320px', maxWidth: '500px' }}>
-          <input
-            type="search"
-            placeholder="Search products, categories or brands"
-            value={searchText}
-            onChange={(event) => setSearchText(event.target.value)}
-            style={{
-              width: '100%',
-              padding: '14px 18px',
-              borderRadius: '12px',
-              border: '1px solid #ddd',
-              fontSize: '1rem',
-            }}
-          />
-        </div>
-      </section>
-
       {/* Slider */}
-      <section className="slider">
+      <div>
         <img
           src={slides[currentSlide]}
           alt="Slider"
           style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
+            width: "100%",
+            height: "400px",
+            objectFit: "cover",
           }}
         />
-      </section>
+      </div>
 
       {/* Top Offers */}
-      <section className="page-section">
+      <div style={{ padding: "30px" }}>
         <h2>🔥 Top Offers</h2>
 
-        <div className="offer-grid" style={{ marginTop: '14px' }}>
-          <div className="offer-box offer-yellow">
+        <div
+          style={{
+            display: "flex",
+            gap: "20px",
+            flexWrap: "wrap",
+            marginTop: "20px",
+          }}
+        >
+          <div
+            style={{
+              background: "#ffeb3b",
+              padding: "20px",
+              borderRadius: "10px",
+              flex: 1,
+            }}
+          >
             <h3>50% OFF</h3>
             <p>On First Order</p>
           </div>
 
-          <div className="offer-box offer-green">
+          <div
+            style={{
+              background: "#4caf50",
+              color: "white",
+              padding: "20px",
+              borderRadius: "10px",
+              flex: 1,
+            }}
+          >
             <h3>Free Delivery</h3>
             <p>Above ₹199</p>
           </div>
 
-          <div className="offer-box offer-blue">
+          <div
+            style={{
+              background: "#2196f3",
+              color: "white",
+              padding: "20px",
+              borderRadius: "10px",
+              flex: 1,
+            }}
+          >
             <h3>Buy 1 Get 1</h3>
             <p>Selected Products</p>
           </div>
         </div>
-      </section>
+      </div>
 
       {/* Categories */}
-      <section className="page-section">
+      <div style={{ padding: "30px" }}>
         <h2>Popular Categories</h2>
 
-        <div className="category-grid" style={{ marginTop: '14px' }}>
+        <div
+          style={{
+            display: "flex",
+            gap: "15px",
+            flexWrap: "wrap",
+            marginTop: "20px",
+          }}
+        >
           <div className="category">🥛 Dairy</div>
           <div className="category">🍎 Fruits</div>
           <div className="category">🥦 Vegetables</div>
@@ -115,38 +127,54 @@ function Home({ addToCart }) {
           <div className="category">🥤 Drinks</div>
           <div className="category">🍫 Chocolates</div>
         </div>
-      </section>
+      </div>
 
       {/* Popular Products */}
-      <ProductCards addToCart={addToCart} searchText={searchText} />
+      <ProductCards addToCart={addToCart} />
 
       {/* Best Sellers */}
-      <section className="page-section">
+      <div style={{ padding: "30px" }}>
         <h2>Best Sellers</h2>
 
-        <div className="best-seller-grid" style={{ marginTop: '14px', justifyContent: 'center' }}>
-          {products
-            .filter((item) =>
-              item.name.toLowerCase().includes(searchText.toLowerCase()) ||
-              item.price.toString().includes(searchText)
-            )
-            .map((item, index) => (
-              <Card
-                key={index}
-                image={item.image}
-                name={item.name}
-                price={item.price}
-                addToCart={addToCart}
-              />
-            ))}
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "20px",
+            justifyContent: "center",
+            marginTop: "20px",
+          }}
+        >
+          {products.map((item, index) => (
+            <Card
+              key={index}
+              image={item.image}
+              name={item.name}
+              price={item.price}
+              addToCart={addToCart}
+            />
+          ))}
         </div>
-      </section>
+      </div>
 
       {/* Why Choose Us */}
-      <section className="page-section" style={{ background: '#f5f5f5', marginTop: '16px' }}>
-        <h2 style={{ textAlign: 'center' }}>Why Choose Us?</h2>
+      <div
+        style={{
+          padding: "40px",
+          background: "#f5f5f5",
+          marginTop: "30px",
+        }}
+      >
+        <h2 style={{ textAlign: "center" }}>Why Choose Us?</h2>
 
-        <div className="feature-grid" style={{ justifyContent: 'space-around', marginTop: '16px' }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-around",
+            flexWrap: "wrap",
+            marginTop: "30px",
+          }}
+        >
           <div>
             <h3>⚡ Fast Delivery</h3>
             <p>Delivery in 10 minutes.</p>
@@ -167,64 +195,96 @@ function Home({ addToCart }) {
             <p>Always ready to help.</p>
           </div>
         </div>
-      </section>
+      </div>
 
       {/* Customer Reviews */}
-      <section className="page-section">
+      <div style={{ padding: "30px" }}>
         <h2>Customer Reviews</h2>
 
-        <div className="reviews-grid" style={{ marginTop: '14px' }}>
-          <div className="review-card">
+        <div
+          style={{
+            display: "flex",
+            gap: "20px",
+            flexWrap: "wrap",
+            marginTop: "20px",
+          }}
+        >
+          <div
+            style={{
+              border: "1px solid #ddd",
+              padding: "20px",
+              borderRadius: "10px",
+              width: "300px",
+            }}
+          >
             ⭐⭐⭐⭐⭐
             <p>Excellent delivery service.</p>
             <h4>- Mukesh</h4>
           </div>
 
-          <div className="review-card">
+          <div
+            style={{
+              border: "1px solid #ddd",
+              padding: "20px",
+              borderRadius: "10px",
+              width: "300px",
+            }}
+          >
             ⭐⭐⭐⭐⭐
             <p>Fresh fruits every time.</p>
             <h4>- Rahul</h4>
           </div>
         </div>
-      </section>
+      </div>
 
       {/* Offer Banner */}
-      <section className="offer-banner">
+      <div
+        style={{
+          background: "#f7c600",
+          margin: "30px",
+          borderRadius: "10px",
+          padding: "30px",
+          textAlign: "center",
+        }}
+      >
         <h2>🎉 Flat 50% OFF</h2>
         <p>Use Code: BLINK50</p>
-      </section>
+      </div>
 
       {/* Download App */}
-      <section className="download-app">
+      <div
+        style={{
+          background: "#00b761",
+          color: "white",
+          textAlign: "center",
+          padding: "50px",
+        }}
+      >
         <h2>Download Blinkit App</h2>
         <p>Available on Android and iOS</p>
 
-        <div className="download-button-group">
-          <button
-            style={{
-              padding: '10px 18px',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
-              minWidth: '130px',
-            }}
-          >
-            Play Store
-          </button>
+        <button
+          style={{
+            padding: "10px 20px",
+            margin: "10px",
+            border: "none",
+            borderRadius: "5px",
+          }}
+        >
+          Play Store
+        </button>
 
-          <button
-            style={{
-              padding: '10px 18px',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
-              minWidth: '130px',
-            }}
-          >
-            App Store
-          </button>
-        </div>
-      </section>
+        <button
+          style={{
+            padding: "10px 20px",
+            margin: "10px",
+            border: "none",
+            borderRadius: "5px",
+          }}
+        >
+          App Store
+        </button>
+      </div>
     </>
   );
 }

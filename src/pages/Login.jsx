@@ -1,8 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api";
-
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,7 +10,7 @@ function Login() {
 
     try {
       const res = await axios.post(
-        `${API_BASE_URL}/users/login`,
+        "http://localhost:5000/api/users/login",
         {
           email,
           password,
@@ -28,39 +26,31 @@ function Login() {
   };
 
   return (
-    <div className="page-section">
+    <div>
       <h2>Login</h2>
 
-      <form onSubmit={handleLogin} className="responsive-form" style={{ maxWidth: '400px', marginTop: '20px' }}>
+      <form onSubmit={handleLogin}>
         <input
           type="email"
           placeholder="Enter Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          style={{ marginBottom: '12px' }}
         />
+
+        <br />
+        <br />
 
         <input
           type="password"
           placeholder="Enter Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          style={{ marginBottom: '12px' }}
         />
 
-        <button
-          type="submit"
-          style={{
-            padding: '12px 20px',
-            background: 'green',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '8px',
-            cursor: 'pointer',
-          }}
-        >
-          Login
-        </button>
+        <br />
+        <br />
+
+        <button type="submit">Login</button>
       </form>
     </div>
   );

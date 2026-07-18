@@ -1,7 +1,5 @@
 import { useState } from "react";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api";
-
 function Register() {
   const [form, setForm] = useState({
     name: "",
@@ -23,7 +21,7 @@ function Register() {
     console.log("Sending Data:", form);
 
     try {
-      const res = await fetch(`${API_BASE_URL}/users/register`, {
+      const res = await fetch("http://localhost:5000/api/users/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -47,10 +45,10 @@ function Register() {
   };
 
   return (
-    <div className="page-section">
+    <div style={{ padding: "40px" }}>
       <h1>Register</h1>
 
-      <form onSubmit={handleSubmit} className="responsive-form" style={{ maxWidth: "400px", marginTop: "20px" }}>
+      <form onSubmit={handleSubmit} style={{ maxWidth: "400px", marginTop: "20px" }}>
         <div style={{ marginBottom: "16px" }}>
           <label htmlFor="name" style={{ display: "block", marginBottom: "8px" }}>
             Name
@@ -63,6 +61,7 @@ function Register() {
             onChange={handleChange}
             placeholder="Enter your name"
             required
+            style={{ width: "100%", padding: "10px", borderRadius: "4px", border: "1px solid #ccc" }}
           />
         </div>
 
@@ -78,6 +77,7 @@ function Register() {
             onChange={handleChange}
             placeholder="Enter your email"
             required
+            style={{ width: "100%", padding: "10px", borderRadius: "4px", border: "1px solid #ccc" }}
           />
         </div>
 
@@ -93,6 +93,7 @@ function Register() {
             onChange={handleChange}
             placeholder="Enter your password"
             required
+            style={{ width: "100%", padding: "10px", borderRadius: "4px", border: "1px solid #ccc" }}
           />
         </div>
 
