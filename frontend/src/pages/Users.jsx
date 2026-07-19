@@ -4,7 +4,7 @@ function Users() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/users/all-users")
+    fetch(`${import.meta.env.VITE_API_URL}/api/users/all-users`)
       .then((res) => res.json())
       .then((data) => {
         setUsers(data.users);
