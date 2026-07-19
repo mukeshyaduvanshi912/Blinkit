@@ -16,7 +16,13 @@ const cartRoutes = require("./routes/cartRoutes");
 const checkoutRoutes = require("./routes/checkoutRoutes");
 
 app.use(cors({
-  origin: "https://blinkit-nine-zeta.vercel.app"
+  origin: function (origin, callback) {
+    if (!origin || /^https:\/\/blinkit(-[a-z0-9]+)*\.vercel\.app$/.test(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  }
 }));
 
 app.get("/", (req, res) => {
